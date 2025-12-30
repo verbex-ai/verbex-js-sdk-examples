@@ -1,6 +1,6 @@
 # Verbex Client JS SDK Examples
 
-A collection of example applications demonstrating how to integrate the [Verbex Client JS SDK](https://www.npmjs.com/package/typetech-client-js-sdk) into various JavaScript frameworks and environments.
+A collection of example applications demonstrating how to integrate the [Verbex Client JS SDK](https://www.npmjs.com/package/@verbex-ai/verbex-js-sdk) into various JavaScript frameworks and environments.
 
 ## Overview
 
