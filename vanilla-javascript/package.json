@@ -1,0 +1,22 @@
+{
+	"name": "verbex-client-js-sdk-vannila-javascript",
+	"version": "1.0.0",
+	"description": "A simple example of using the Verbex Client JS SDK with vanilla JavaScript.",
+	"type": "module",
+	"scripts": {
+		"dev": "vite --port 8000"
+	},
+	"dependencies": {
+		"@verbex-ai/verbex-js-sdk": "^1.0.0"
+	},
+	"devDependencies": {
+		"vite": "^6.0.0"
+	},
+	"keywords": [
+		"verbex",
+		"examples",
+		"sdk"
+	],
+	"author": "verbex.ai",
+	"license": "ISC"
+}

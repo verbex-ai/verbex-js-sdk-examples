@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Verbex Client JS SDK</title>
+		<link rel="stylesheet" href="./style.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div class="header">
+				<h1>🎙️ Verbex Client JS SDK</h1>
+				<p>
+					A test application demonstrating the capabilities of the Verbex Client
+					JavaScript SDK.
+				</p>
+			</div>
+
+			<div class="content">
+				<div class="form-group">
+					<label for="sessionToken">Session Token:</label>
+					<input
+						type="text"
+						id="sessionToken"
+						placeholder="Enter your session token"
+					/>
+				</div>
+
+				<div class="form-group">
+					<label for="sampleRate">Audio Sample Rate:</label>
+					<input
+						type="number"
+						id="sampleRate"
+						value="24000"
+						placeholder="24000"
+					/>
+				</div>
+
+				<div class="button-group">
+					<button id="connectBtn" class="btn-primary">Connect</button>
+					<button id="muteBtn" class="btn-warning" disabled>Mute</button>
+					<button id="disconnectBtn" class="btn-danger" disabled>
+						Disconnect
+					</button>
+				</div>
+
+				<div id="status" class="status disconnected">Status: Disconnected</div>
+
+				<div id="microphoneStatus" class="microphone-status">
+					🎤 Microphone access granted. You can now speak with the AI agent.
+				</div>
+
+				<div
+					class="transcription"
+					id="transcriptionSection"
+					style="display: none"
+				>
+					<h3>Real-time Transcription</h3>
+					<div id="transcriptionContainer" class="transcription-container">
+						<div class="transcription-placeholder">
+							Transcription will appear here as the conversation progresses...
+						</div>
+					</div>
+				</div>
+
+				<div class="events">
+					<h3>Event Log</h3>
+					<div id="eventLog" class="event-log">
+						<p style="color: #999; text-align: center">No events yet...</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script type="module" src="./app.js"></script>
+	</body>
+</html>
