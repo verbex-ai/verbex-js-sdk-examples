@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Volume bar gradient - matches React/Vanilla-JS examples */
+@layer components {
+  .volume-bar {
+    background: linear-gradient(to right, #10b981, #14b8a6, #3b82f6);
+  }
+}
