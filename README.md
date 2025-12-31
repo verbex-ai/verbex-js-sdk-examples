@@ -14,9 +14,12 @@ This repository contains example implementations showing how to use the Verbex C
 
 ## Examples
 
-| Example                | Description                              | Directory                                      |
-| ---------------------- | ---------------------------------------- | ---------------------------------------------- |
-| **Vanilla JavaScript** | Simple HTML/JS implementation using Vite | [`vanilla-javascript/`](./vannila-javascript/) |
+| Example                | Description                                                    | Directory                    |
+| ---------------------- | -------------------------------------------------------------- | ---------------------------- |
+| **Vanilla JavaScript** | Simple HTML/JS implementation using Vite                       | [`vanilla-js/`](./vanilla-js/) |
+| **React**              | React implementation with hooks and components using Vite      | [`react/`](./react/)         |
+| **Vue**                | Vue 3 Composition API implementation with Vite                 | [`vue/`](./vue/)             |
+| **Next.js**            | Next.js App Router implementation with server/client components | [`nextjs/`](./nextjs/)       |
 
 ## Quick Start
 
@@ -39,7 +42,17 @@ This repository contains example implementations showing how to use the Verbex C
 2. Navigate to the example you want to run:
 
    ```bash
-   cd vannila-javascript
+   # For Vanilla JavaScript
+   cd vanilla-js
+
+   # For React
+   cd react
+
+   # For Vue
+   cd vue
+
+   # For Next.js
+   cd nextjs
    ```
 
 3. Install dependencies:
@@ -58,7 +71,7 @@ This repository contains example implementations showing how to use the Verbex C
    npm run dev
    ```
 
-5. Open your browser and navigate to the URL shown in the terminal (typically `http://localhost:8000`).
+5. Open your browser and navigate to the URL shown in the terminal (typically `http://localhost:5173` for Vite examples or `http://localhost:3000` for Next.js).
 
 ## SDK Installation
 
@@ -66,19 +79,19 @@ To use the Verbex Client JS SDK in your own project:
 
 ```bash
 # Using pnpm
-pnpm add verbex-client-js-sdk
+pnpm add @verbex-ai/verbex-js-sdk
 
 # Using npm
-npm install verbex-client-js-sdk
+npm install @verbex-ai/verbex-js-sdk
 
 # Using yarn
-yarn add verbex-client-js-sdk
+yarn add @verbex-ai/verbex-js-sdk
 ```
 
 ## Basic Usage
 
 ```javascript
-import { VerbexWebClient } from "verbex-client-js-sdk";
+import { VerbexWebClient } from "@verbex-ai/verbex-js-sdk";
 
 // Create a new client instance
 const client = new VerbexWebClient();
@@ -140,5 +153,5 @@ ISC License - see individual example directories for specific license informatio
 ## Resources
 
 - [Verbex Documentation](https://docs.verbex.ai/introduction)
-- [SDK npm Package](https://www.npmjs.com/package/typetech-client-js-sdk)
+- [SDK npm Package](https://www.npmjs.com/package/@verbex-ai/verbex-js-sdk)
 - [Report Issues](https://github.com/typetechit/verbex-client-js-sdk-examples/issues)
