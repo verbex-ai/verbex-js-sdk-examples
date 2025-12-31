@@ -3,75 +3,435 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Verbex Client JS SDK</title>
+		<title>Verbex AI - Customer Agent Interface</title>
+		<!-- Tailwind CSS for styling -->
+		<script src="https://cdn.tailwindcss.com"></script>
+		<!-- Custom CSS for animations and SDK-specific styles -->
 		<link rel="stylesheet" href="./style.css" />
 	</head>
-	<body>
-		<div class="container">
-			<div class="header">
-				<h1>🎙️ Verbex Client JS SDK</h1>
-				<p>
-					A test application demonstrating the capabilities of the Verbex Client
-					JavaScript SDK.
-				</p>
+	<body class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 min-h-screen">
+
+		<!-- ============================================
+		     HEADER: Connection Status Display
+		     ============================================
+		     Shows the current connection status (Disconnected/Connecting/Connected)
+		     Updated by app.js via the 'headerStatus' element
+		-->
+		<header class="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-50">
+			<div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+				<div class="flex items-center justify-between">
+					<div class="flex items-center space-x-3">
+						<div class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+							<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+							</svg>
+						</div>
+						<div>
+							<h1 class="text-xl sm:text-2xl font-bold text-gray-900">Verbex AI</h1>
+							<p class="text-xs sm:text-sm text-gray-500">Customer Agent Interface</p>
+						</div>
+					</div>
+					<!-- SDK Connection Status Indicator - Updated dynamically via updateStatus() -->
+					<div id="headerStatus" class="hidden sm:flex items-center space-x-2 px-4 py-2 rounded-full bg-gray-100">
+						<div class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></div>
+						<span class="text-sm font-medium text-gray-600">Disconnected</span>
+					</div>
+				</div>
 			</div>
+		</header>
 
-			<div class="content">
-				<div class="form-group">
-					<label for="sessionToken">Session Token:</label>
-					<input
-						type="text"
-						id="sessionToken"
-						placeholder="Enter your session token"
-					/>
-				</div>
+		<!-- ============================================
+		     MAIN CONTENT: 3-Section Responsive Layout
+		     ============================================
+		     Desktop (XL): Left (3 cols) | Center (6 cols) | Right (3 cols)
+		     Tablet (LG):  Left (4 cols) | Center (8 cols) | Right (12 cols stacked)
+		     Mobile:       Fully stacked vertical layout
+		-->
+		<main class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+			<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-				<div class="form-group">
-					<label for="sampleRate">Audio Sample Rate:</label>
-					<input
-						type="number"
-						id="sampleRate"
-						value="24000"
-						placeholder="24000"
-					/>
-				</div>
+				<!-- ==========================================
+				     SECTION 1: Configuration & Controls (Left Panel)
+				     ==========================================
+				     Contains all SDK session configuration and control buttons.
+				     Essential elements for Verbex SDK integration.
+				-->
+				<div class="lg:col-span-4 xl:col-span-3">
+					<!-- Combined Configuration & Controls Card -->
+					<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+						<div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-3">
+							<h2 class="text-lg font-semibold text-white flex items-center">
+								<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+								</svg>
+								Configuration & Controls
+							</h2>
+						</div>
+						<div class="p-4 space-y-4">
 
-				<div class="button-group">
-					<button id="connectBtn" class="btn-primary">Connect</button>
-					<button id="muteBtn" class="btn-warning" disabled>Mute</button>
-					<button id="disconnectBtn" class="btn-danger" disabled>
-						Disconnect
-					</button>
-				</div>
+							<!-- ==========================================
+							     SDK CONFIGURATION: Session Token
+							     ==========================================
+							     REQUIRED: JWT token obtained from your server-side API
+							     Used in: client.initiateSession({ sessionToken: ... })
+							-->
+							<div>
+								<label class="block text-sm font-medium text-gray-700 mb-1">Session Token</label>
+								<input
+									type="text"
+									id="sessionToken"
+									placeholder="Enter your session token"
+									class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+								/>
+							</div>
 
-				<div id="status" class="status disconnected">Status: Disconnected</div>
+							<!-- ==========================================
+							     SDK CONFIGURATION: Audio Sample Rate
+							     ==========================================
+							     OPTIONAL: Audio sample rate for raw audio analysis (default: 24000)
+							     Common values: 24000, 48000
+							     Used in: client.initiateSession({ audioSampleRate: ... })
+							-->
+							<div>
+								<label class="block text-sm font-medium text-gray-700 mb-1">Audio Sample Rate</label>
+								<input
+									type="number"
+									id="sampleRate"
+									value="24000"
+									placeholder="24000"
+									class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm"
+								/>
+							</div>
 
-				<div id="microphoneStatus" class="microphone-status">
-					🎤 Microphone access granted. You can now speak with the AI agent.
-				</div>
+							<!-- ==========================================
+							     SDK CONFIGURATION: Input Device (Microphone)
+							     ==========================================
+							     OPTIONAL: Select specific microphone device
+							     Populated dynamically via navigator.mediaDevices.enumerateDevices()
+							     Used in: client.initiateSession({ inputDeviceId: ... })
+							-->
+							<div>
+								<label class="block text-sm font-medium text-gray-700 mb-1">
+									<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+									</svg>
+									Input Device
+								</label>
+								<select
+									id="inputDevice"
+									class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm bg-white"
+								>
+									<option value="">Default Microphone</option>
+									<!-- Additional options populated via app.js enumerateDevices() -->
+								</select>
+							</div>
 
-				<div
-					class="transcription"
-					id="transcriptionSection"
-					style="display: none"
-				>
-					<h3>Real-time Transcription</h3>
-					<div id="transcriptionContainer" class="transcription-container">
-						<div class="transcription-placeholder">
-							Transcription will appear here as the conversation progresses...
+							<!-- ==========================================
+							     SDK CONFIGURATION: Output Device (Speaker)
+							     ==========================================
+							     OPTIONAL: Select specific speaker/headphone device
+							     Populated dynamically via navigator.mediaDevices.enumerateDevices()
+							     Used in: client.initiateSession({ outputDeviceId: ... })
+							-->
+							<div>
+								<label class="block text-sm font-medium text-gray-700 mb-1">
+									<svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+									</svg>
+									Output Device
+								</label>
+								<select
+									id="outputDevice"
+									class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm bg-white"
+								>
+									<option value="">Default Speaker</option>
+									<!-- Additional options populated via app.js enumerateDevices() -->
+								</select>
+							</div>
+
+							<!-- Divider -->
+							<div class="border-t border-gray-200 my-4"></div>
+
+							<!-- ==========================================
+							     SDK CONTROL: Connect Button
+							     ==========================================
+							     Triggers: client.initiateSession(sessionConfig)
+							     Visible: Always (when disconnected)
+							     Hidden: When connected (replaced by Mute/Disconnect)
+							-->
+							<button
+								id="connectBtn"
+								class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center space-x-2 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+							>
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+								</svg>
+								<span>Connect</span>
+							</button>
+
+							<!-- ==========================================
+							     SDK CONTROL: Mute Button
+							     ==========================================
+							     Triggers: client.mute() / client.unmute()
+							     Visible: Only when connected
+							     Toggles between Mute (amber) and Unmute (purple)
+							-->
+							<button
+								id="muteBtn"
+								class="hidden w-full bg-amber-500 hover:bg-amber-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 items-center justify-center space-x-2 shadow-md hover:shadow-lg"
+							>
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+								</svg>
+								<span>Mute</span>
+							</button>
+
+							<!-- ==========================================
+							     SDK CONTROL: Disconnect Button
+							     ==========================================
+							     Triggers: client.terminateSession()
+							     Visible: Only when connected
+							     Cleans up audio resources and disconnects from server
+							-->
+							<button
+								id="disconnectBtn"
+								class="hidden w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg transition-all duration-200 items-center justify-center space-x-2 shadow-md hover:shadow-lg"
+							>
+								<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+								</svg>
+								<span>Disconnect</span>
+							</button>
+
+							<!-- Status Divider (shown when connected) -->
+							<div id="statusDivider" class="hidden border-t border-gray-200 my-4"></div>
+
+							<!-- ==========================================
+							     SDK STATUS: Agent Speaking Indicator
+							     ==========================================
+							     Displays: When AI agent is actively speaking
+							     Updated via: client.on('agent_speech_started/ended')
+							     SDK Property: client.isAgentSpeaking
+							-->
+							<div id="agentSpeakingIndicator" class="hidden px-4 py-3 rounded-lg bg-purple-50 border border-purple-200 flex items-center space-x-3">
+								<div class="flex-shrink-0">
+									<div class="speaking-dot"></div> <!-- Animated pulsing dot -->
+								</div>
+								<div class="flex-1 min-w-0">
+									<p class="text-sm font-medium text-purple-900">AI Agent Speaking</p>
+									<p class="text-xs text-purple-600">Please wait...</p>
+								</div>
+							</div>
+
+							<!-- ==========================================
+							     SDK STATUS: Microphone Active Indicator
+							     ==========================================
+							     Displays: When SDK has microphone access and is listening
+							     Updated via: client.on('session_connected')
+							-->
+							<div id="microphoneStatus" class="hidden px-4 py-3 rounded-lg bg-blue-50 border border-blue-200 flex items-center space-x-3">
+								<div class="flex-shrink-0">
+									<svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+									</svg>
+								</div>
+								<div class="flex-1 min-w-0">
+									<p class="text-sm font-medium text-blue-900">Microphone Active</p>
+									<p class="text-xs text-blue-600">Speak naturally with the AI</p>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="events">
-					<h3>Event Log</h3>
-					<div id="eventLog" class="event-log">
-						<p style="color: #999; text-align: center">No events yet...</p>
+				<!-- ==========================================
+				     SECTION 2: Audio Visualizer & Transcript (Center Panel)
+				     ==========================================
+				     Displays real-time audio visualization and conversation transcripts
+				-->
+				<div class="lg:col-span-8 xl:col-span-6 space-y-6">
+
+					<!-- ==========================================
+					     SDK FEATURE: Audio Visualization
+					     ==========================================
+					     Displays waveform and volume meter from SDK audio stream
+					     Requires: enableRawAudio: true in session config
+					-->
+					<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+						<div class="bg-gradient-to-r from-green-500 to-teal-600 px-4 py-2.5">
+							<h2 class="text-base font-semibold text-white flex items-center">
+								<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+								</svg>
+								Audio Visualization
+							</h2>
+						</div>
+
+						<!-- Audio visualization content (shown when connected) -->
+						<div id="audioViz" class="hidden p-4 bg-gradient-to-br from-gray-50 to-gray-100">
+							<div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+
+								<!-- ==========================================
+								     SDK FEATURE: Audio Waveform
+								     ==========================================
+								     Canvas element for real-time PCM waveform visualization
+								     Updated via: client.audioAnalyzer.getPCMFrame()
+								     Drawn using: drawWaveform() function
+								-->
+								<div class="lg:col-span-2 bg-white rounded-lg p-3 shadow-sm border border-gray-200">
+									<div class="flex items-center justify-between mb-2">
+										<span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Waveform</span>
+										<div class="flex items-center space-x-1">
+											<div class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+											<span class="text-xs text-green-600 font-medium">Live</span>
+										</div>
+									</div>
+									<!-- Waveform Canvas - Updated ~60fps when connected -->
+									<canvas id="waveform" class="w-full" style="height: 80px;"></canvas>
+								</div>
+
+								<!-- ==========================================
+								     SDK FEATURE: Volume Meter
+								     ==========================================
+								     Real-time volume level visualization
+								     Updated via: client.audioAnalyzer.calculateVolume()
+								     Updates ~60fps via requestAnimationFrame
+								-->
+								<div class="bg-white rounded-lg p-3 shadow-sm border border-gray-200">
+									<div class="flex items-center justify-between mb-2">
+										<span class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Volume</span>
+										<!-- Volume percentage display -->
+										<span id="volumeText" class="text-xs font-bold text-indigo-600">0%</span>
+									</div>
+									<div class="flex flex-col items-center justify-center h-20">
+										<div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
+											<!-- Animated volume bar with gradient (green->yellow->red) -->
+											<div id="volumeBar" class="h-full volume-bar transition-all duration-100 ease-out"></div>
+										</div>
+										<div class="flex justify-between w-full mt-1 px-1">
+											<span class="text-[10px] text-gray-400">0%</span>
+											<span class="text-[10px] text-gray-400">50%</span>
+											<span class="text-[10px] text-gray-400">100%</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Placeholder shown when disconnected -->
+						<div id="audioVizPlaceholder" class="p-8 text-center bg-gradient-to-br from-gray-50 to-gray-100">
+							<svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+							</svg>
+							<p class="text-gray-500 text-sm">Connect to see audio visualization</p>
+						</div>
+					</div>
+
+					<!-- ==========================================
+					     SDK FEATURE: Session Metadata
+					     ==========================================
+					     Displays custom metadata from server
+					     Updated via: client.on('session_metadata', callback)
+					     Data format: Record<string, any>
+					-->
+					<div id="sessionMetadata" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+						<div class="bg-gradient-to-r from-indigo-500 to-purple-600 px-4 py-3">
+							<h2 class="text-lg font-semibold text-white flex items-center">
+								<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+								</svg>
+								Session Information
+							</h2>
+						</div>
+						<!-- Metadata content populated dynamically -->
+						<div id="sessionMetadataContent" class="p-4 bg-gray-50">
+							<p class="text-center text-gray-400 py-4 text-sm">Session metadata will appear here...</p>
+						</div>
+					</div>
+
+					<!-- ==========================================
+					     SDK FEATURE: Live Transcription
+					     ==========================================
+					     Real-time conversation transcription
+					     Updated via: client.on('transcript_updated', callback)
+					     Payload: { transcript: TranscriptEntry[] }
+					     Entry format: { role: "user"|"agent", content: string, ... }
+					-->
+					<div id="transcriptionSection" class="hidden bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+						<div class="bg-gradient-to-r from-blue-500 to-cyan-600 px-4 py-3 flex items-center justify-between">
+							<h2 class="text-lg font-semibold text-white flex items-center">
+								<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+								</svg>
+								Live Transcription
+							</h2>
+							<span class="bg-white/20 text-white text-xs font-medium px-2 py-1 rounded-full">LIVE</span>
+						</div>
+						<!-- Transcript entries populated dynamically via displayTranscript() -->
+						<div id="transcriptionContainer" class="p-4 bg-gray-50 space-y-3 overflow-y-auto max-h-96">
+							<div class="text-center text-gray-400 py-8 text-sm">
+								Transcription will appear here as the conversation progresses...
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- ==========================================
+				     SECTION 3: Event Log (Right Panel)
+				     ==========================================
+				     Displays all SDK events for debugging and monitoring
+				     Fixed height with scrolling for easy event tracking
+				-->
+				<div class="lg:col-span-12 xl:col-span-3">
+					<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex flex-col" style="height: 600px;">
+						<div class="bg-gradient-to-r from-gray-700 to-gray-900 px-4 py-3 flex items-center justify-between flex-shrink-0">
+							<h2 class="text-lg font-semibold text-white flex items-center">
+								<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+								</svg>
+								Event Log
+							</h2>
+							<button
+								onclick="document.getElementById('eventLog').innerHTML = '<p class=\'text-center text-gray-400 py-8\'>No events yet...</p>'"
+								class="text-white hover:text-gray-200 text-xs font-medium px-3 py-1 rounded bg-white/10 hover:bg-white/20 transition-colors"
+							>
+								Clear
+							</button>
+						</div>
+						<!-- ==========================================
+						     SDK EVENT LOG
+						     ==========================================
+						     Logs all SDK events with timestamps for debugging:
+						     - session_connected, session_disconnected
+						     - agent_speech_started, agent_speech_ended
+						     - transcript_updated, session_metadata
+						     - audio_stream, connection_lost, connection_restored
+						     - microphone_permission_denied, session_error
+						-->
+						<div id="eventLog" class="flex-1 overflow-y-auto p-4 bg-gray-50 font-mono text-xs space-y-2">
+							<p class="text-center text-gray-400 py-8">No events yet...</p>
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</main>
 
+		<!-- Footer -->
+		<footer class="mt-12 py-6 border-t border-gray-200 bg-white/50">
+			<div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8">
+				<p class="text-center text-sm text-gray-500">
+					Powered by <span class="font-semibold text-indigo-600">Verbex AI SDK</span> • Customer Agent Interface v1.0
+				</p>
+			</div>
+		</footer>
+
+		<!-- ==========================================
+		     JAVASCRIPT: Verbex SDK Integration
+		     ==========================================
+		     Imports and initializes the Verbex SDK
+		     Handles all SDK events, configuration, and UI updates
+		-->
 		<script type="module" src="./app.js"></script>
 	</body>
 </html>
